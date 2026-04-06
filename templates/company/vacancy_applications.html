@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold">Nomzodlar: <span class="text-primary">{{ vacancy.title }}</span></h2>
+        <a href="{% url 'profile' request.user.pk %}" class="btn btn-outline-secondary">Orqaga</a>
+    </div>
+
+    <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="bg-light">
+                    <tr>
+                        <th class="ps-4">Nomzod</th>
+                        <th>Email</th>
+                        <th>Rezyume</th>
+                        <th>Topshirilgan sana</th>
+                        <th>Holat</th>
+                        <th class="text-end pe-4">Amallar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for app in applications %}
+                        <tr>
+                            <td class="ps-4">
+                                <div class="d-flex align-items-center">
+                                    <a href="{% url 'profile' app.user.pk %}" class="bg-secondary text-white rounded-circle d-flex justify-content-center align-items-center me-3 text-decoration-none" style="width: 40px; height: 40px; font-weight: bold;">
+                                        {{ app.user.first_name|slice:":1" }}
+                                    </a>
+                                    <a href="{% url 'profile' app.user.pk %}" class="fw-bold text-decoration-none text-dark">
+                                        {{ app.user.first_name }} {{ app.user.last_name }}
+                                    </a>
+                                </div>
+                            </td>
+                            <td>{{ app.user.email }}</td>
+                            <td>
+                                {% if app.user.resume_url %}
+                                    <a href="{{ app.user.resume_url.url }}" class="btn btn-sm btn-outline-success">
+                                        <i class="fas fa-file-download me-1"></i> Ko'rish
+                                    </a>
+                                {% else %}
+                                    <span class="text-muted small">Yuklanmagan</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ app.created_at|date:"d.m.Y" }}</td>
+                            <td>
+                                {% if app.status == 'pending' %}
+                                    <span class="badge bg-warning text-dark">Kutilmoqda</span>
+                                {% elif app.status == 'accepted' %}
+                                    <span class="badge bg-success">Qabul qilindi</span>
+                                {% else %}
+                                    <span class="badge bg-danger">Rad etildi</span>
+                                {% endif %}
+                            </td>
+                            <td class="text-end pe-4">
+                                {% if app.status == 'pending' %}
+                                    <a href="{% url 'update_status' app.pk 'accepted' %}" class="btn btn-sm btn-success me-1 shadow-sm">
+                                        <i class="fas fa-check"></i> Qabul
+                                    </a>
+                                    <a href="{% url 'update_status' app.pk 'rejected' %}" class="btn btn-sm btn-danger shadow-sm">
+                                        <i class="fas fa-times"></i> Rad
+                                    </a>
+                                {% elif app.status == 'accepted' %}
+                                    <a href="{% url 'chat_view' app.pk %}" class="btn btn-sm btn-primary shadow-sm">
+                                        <i class="fas fa-comments"></i> Go to Chat
+                                    </a>
+                                {% else %}
+                                    <span class="text-muted small italic">Yakunlangan</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="6" class="text-center py-5 text-muted">
+                                <p>Hozircha hech kim ariza topshirmadi.</p>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

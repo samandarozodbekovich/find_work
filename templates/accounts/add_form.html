@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 card shadow-sm p-4" style="background-color: var(--card-bg);">
+            <h4 class="mb-4 fw-bold" style="color: var(--text-color);">{{ title }}</h4>
+            
+            <form method="post" enctype="multipart/form-data" class="custom-form">
+                {% csrf_token %}
+                {{ form.as_p }}
+                
+                <div class="d-flex justify-content-between mt-4">
+                    <a href="{% url 'profile' user.pk %}" class="btn btn-secondary">Bekor qilish</a>
+                    
+                    <div>
+                        <button type="submit" name="add_another" class="btn btn-outline-primary me-2">
+                            Saqlash va yana qo'shish
+                        </button>
+                        <button type="submit" class="btn btn-primary">Saqlash</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Form elementlarini tungi rejimda oqqa o'girish */
+    [data-theme='dark'] .custom-form p {
+        color: var(--text-color);
+    }
+    [data-theme='dark'] .custom-form input,
+    [data-theme='dark'] .custom-form select,
+    [data-theme='dark'] .custom-form textarea {
+        background-color: #2d2d2d !important;
+        border-color: #444 !important;
+        color: #fff !important;
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <div class="card shadow border-0 p-4 text-center" style="background-color: var(--card-bg);">
+                <h4 class="text-danger mb-4">Vakansiyani o'chirish</h4>
+                <p style="color: var(--text-color);">
+                    Haqiqatan ham <strong>"{{ vacancy.title }}"</strong> vakansiyasini o'chirib tashlamoqchimisiz?
+                </p>
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="d-grid gap-2 mt-4">
+                        <button type="submit" class="btn btn-danger fw-bold">Ha, o'chirilsin</button>
+                        <a href="{% url 'profile' user_pk %}" class="btn btn-outline-secondary">Bekor qilish</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

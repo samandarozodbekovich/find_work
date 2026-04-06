@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5">
+    <div class="card p-4" style="background-color: var(--card-bg);">
+        <h4 style="color: var(--text-color);">Haqiqatan ham o'chirmoqchimisiz?</h4>
+        <form method="post">
+            {% csrf_token %}
+            <div class="mt-3">
+                <button type="submit" class="btn btn-danger">Ha, o'chirish</button>
+                <a href="{% url 'profile' user.pk %}" class="btn btn-secondary">Bekor qilish</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

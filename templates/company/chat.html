@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card shadow-sm border-0 rounded-4" style="background-color: var(--card-bg);">
+        <!-- Header qismi o'zgartirildi -->
+        <div class="card-header p-3 border-bottom" style="background-color: var(--card-bg); border-color: var(--border-color) !important;">
+            <h5 class="mb-0 fw-bold" style="color: var(--text-color);">Chat: {{ application.vacancy.title }}</h5>
+            <small style="color: var(--text-color); opacity: 0.6;">
+                {{ application.user.first_name }} va {{ application.vacancy.company.company_name }}
+            </small>
+        </div>
+        
+        <div id="chat-body" class="card-body" style="height: 400px; overflow-y: auto; background-color: var(--bg-color);">
+            {% for message in messages %}
+                <div class="d-flex {% if message.sender == request.user %}justify-content-end{% else %}justify-content-start{% endif %} mb-3">
+                    <div class="p-3 rounded-3 {% if message.sender == request.user %}bg-primary text-white shadow-sm{% else %}border{% endif %}" 
+                         style="max-width: 70%; {% if message.sender != request.user %}background-color: var(--card-bg); color: var(--text-color); border-color: var(--border-color) !important;{% endif %}">
+                        <p class="mb-1">{{ message.content }}</p>
+                        <small class="{% if message.sender == request.user %}text-white-50{% else %}text-muted{% endif %} font-italic" style="font-size: 0.75rem;">
+                            {{ message.created_at|date:"H:i" }}
+                        </small>
+                    </div>
+                </div>
+            {% empty %}
+                <p id="no-messages" class="text-center mt-5" style="color: var(--text-color); opacity: 0.5;">Hozircha xabarlar yo'q. Muloqotni boshlang!</p>
+            {% endfor %}
+        </div>
+
+        <div class="card-footer border-0 p-3" style="background-color: var(--card-bg); border-top: 1px solid var(--border-color) !important;">
+            <form id="chat-form" method="post">
+                {% csrf_token %}
+                <div class="input-group">
+                    <input type="text" id="chat-input" name="content" class="form-control" placeholder="Xabar yozing..." 
+                           autocomplete="off" required style="background-color: var(--bg-color); border-color: var(--border-color); color: var(--text-color);">
+                    <button class="btn btn-primary px-4 shadow-sm" type="submit" id="send-btn">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Chat skrollbarini chiroyli qilish */
+    #chat-body::-webkit-scrollbar {
+        width: 6px;
+    }
+    #chat-body::-webkit-scrollbar-thumb {
+        background-color: var(--border-color);
+        border-radius: 10px;
+    }
+</style>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    function scrollToBottom() {
+        var chatBody = document.getElementById('chat-body');
+        chatBody.scrollTop = chatBody.scrollHeight;
+    }
+
+    $(document).ready(function() {
+        scrollToBottom();
+
+        $('#chat-form').on('submit', function(e) {
+            e.preventDefault();
+            
+            var content = $('#chat-input').val();
+            var $btn = $('#send-btn');
+
+            if (content.trim() === "") return;
+
+            $btn.prop('disabled', true);
+
+            $.ajax({
+                type: 'POST',
+                url: window.location.href,
+                data: $(this).serialize(),
+                success: function(response) {
+                    if (response.status === 'success') {
+                        $('#no-messages').remove();
+                        
+                        var newMessage = `
+                            <div class="d-flex justify-content-end mb-3">
+                                <div class="p-3 rounded-3 bg-primary text-white shadow-sm" style="max-width: 70%;">
+                                    <p class="mb-1">${response.content}</p>
+                                    <small class="text-white-50 font-italic" style="font-size: 0.75rem;">${response.created_at}</small>
+                                </div>
+                            </div>
+                        `;
+                        
+                        $('#chat-body').append(newMessage);
+                        $('#chat-input').val('');
+                        scrollToBottom();
+                    }
+                },
+                error: function() {
+                    alert("Xabar yuborilmadi. Tarmoqni tekshiring.");
+                },
+                complete: function() {
+                    $btn.prop('disabled', false);
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

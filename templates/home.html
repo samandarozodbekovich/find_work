@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% load hitcount_tags %}
+
+{% block content %}
+    <div class="p-5 mb-4 custom-banner rounded-3 text-center shadow-sm">
+        <div class="container-fluid py-5">
+            <h1 class="display-5 fw-bold text-primary">Orzuingizdagi ishni toping</h1>
+            <p class="col-md-8 mx-auto fs-5" style="color: var(--text-color);">Bitiruvchilar va mutaxassislar uchun eng yaxshi vakansiyalar shu yerda.</p>
+            
+            <form action="{% url 'vacancy_list' %}" method="GET" class="mt-4 d-flex justify-content-center">
+                <input type="text" name="q" 
+                    class="form-control w-50 shadow-sm" 
+                    style="background-color: var(--bg-color); color: var(--text-color); border-color: var(--border-color);" 
+                    placeholder="Lavozim yoki kompaniya nomi...">
+                
+                <button type="submit" class="btn btn-primary ms-2 px-4 shadow-sm">Izlash</button>
+            </form>
+        </div>
+    </div>
+
+<div class="container">
+    <section class="mb-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="fw-bold" style="color: var(--text-color);">Eng so'nggi vakansiyalar</h2>
+            <a href="{% url 'vacancy_list' %}" class="text-decoration-none text-primary">Barchasini ko'rish →</a>
+        </div>
+        <div class="row g-4">
+            {% for vacancy in vacancies %}
+            <div class="col-md-4">
+                <div class="card h-100 shadow-sm border-0 transition-hover" style="background-color: var(--card-bg);">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h5 class="card-title fw-bold text-primary mb-0">{{ vacancy.title }}</h5>
+                        </div>
+                        <h6 class="card-subtitle mb-3" style="color: var(--text-color); opacity: 0.7;">
+                            <i class="fas fa-building me-1 small"></i> {{ vacancy.company.company_name }}
+                        </h6>
+                        
+                        <p class="card-text small mb-3" style="color: var(--text-color); opacity: 0.8;">
+                            {{ vacancy.description|truncatewords:12 }}
+                        </p>
+
+                        <div class="d-flex gap-3 mt-auto pt-2 border-top" style="border-color: var(--border-color) !important;">
+                            <span class="small" style="color: var(--text-color); opacity: 0.6;">
+                                <i class="fas fa-eye me-1 text-info"></i> {% get_hit_count for vacancy %}
+                            </span>
+                            <span class="small" style="color: var(--text-color); opacity: 0.6;">
+                                <i class="fas fa-comments me-1 text-warning"></i> {{ vacancy.comments.count }}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-transparent border-0 pb-3">
+                        <a href="{% url 'vacancy_detail' vacancy.pk %}" class="btn btn-outline-primary w-100 rounded-pill">Batafsil</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <section class="mb-5 p-4 rounded-4 shadow-sm" style="background-color: var(--card-bg); transition: background-color 0.3s;">
+        <h2 class="fw-bold mb-4" style="color: var(--text-color);">Hamkor kompaniyalar</h2>
+        <div class="d-flex flex-wrap gap-3">
+            {% for company in companies %}
+            <span class="p-3 border rounded-pill shadow-sm" style="background-color: var(--bg-color); color: var(--text-color); border-color: var(--border-color); transition: 0.3s;">
+                <i class="fas fa-building me-2 text-primary"></i> {{ company.company_name }}
+            </span>
+            {% endfor %}
+        </div>
+    </section>
+</div>
+
+<style>
+    .transition-hover { transition: all 0.3s ease; }
+    .transition-hover:hover { transform: translateY(-7px); }
+    .card-footer .btn { font-weight: 500; }
+</style>
+{% endblock %}

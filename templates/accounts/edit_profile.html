@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card shadow-sm p-4 border-0 rounded-3" style="background-color: var(--card-bg);">
+                <h2 class="mb-4 fw-bold" style="color: var(--text-color);">Profilni tahrirlash</h2>
+                
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <h5 class="text-primary mt-4 mb-3">Shaxsiy ma'lumotlar</h5>
+                    {% for field in form %}
+                        <div class="mb-3">
+                            <label class="form-label fw-bold" style="color: var(--text-color);">{{ field.label }}</label>
+                            <div class="form-control-wrapper">
+                                {{ field }}
+                            </div>
+                            {% if field.errors %}<div class="text-danger small">{{ field.errors }}</div>{% endif %}
+                        </div>
+                    {% endfor %}
+
+                    <hr style="border-color: var(--border-color);">
+
+                    <h5 class="text-primary mt-4 mb-3">Profil qismlari</h5>
+                    <div class="d-flex flex-wrap gap-2 mb-4">
+                        <a href="{% url 'add_skill' user.pk %}" class="btn btn-outline-primary btn-sm"><i class="fas fa-plus me-1"></i> Ko'nikma qo'shish</a>
+                        <a href="{% url 'add_portfolio' user.pk %}" class="btn btn-outline-primary btn-sm"><i class="fas fa-plus me-1"></i> Portfolio qo'shish</a>
+                        <a href="{% url 'add_experience' user.pk %}" class="btn btn-outline-primary btn-sm"><i class="fas fa-plus me-1"></i> Ish tajribasi qo'shish</a>
+                        <a href="{% url 'add_education' user.pk %}" class="btn btn-outline-primary btn-sm"><i class="fas fa-plus me-1"></i> Ta'lim qo'shish</a>
+                        <a href="{% url 'add_language' user.pk %}" class="btn btn-outline-primary btn-sm"><i class="fas fa-plus me-1"></i> Til qo'shish</a>
+                    </div>
+
+                    <div class="d-flex justify-content-between mt-5">
+                        <a href="{% url 'profile' user.pk %}" class="btn btn-secondary">Bekor qilish</a>
+                        <button type="submit" class="btn btn-success px-4">Saqlash</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Form input maydonlarini tungi rejimga moslash */
+    [data-theme='dark'] .form-control, 
+    [data-theme='dark'] .form-select {
+        background-color: #2d2d2d !important;
+        border-color: #444 !important;
+        color: #fff !important;
+    }
+    [data-theme='dark'] .form-control:focus {
+        background-color: #333 !important;
+        border-color: var(--primary-color) !important;
+    }
+</style>
+{% endblock %}

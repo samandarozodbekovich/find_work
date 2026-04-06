@@ -1,0 +1,171 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card shadow-sm p-4 mb-4 border-0 rounded-3" style="background-color: var(--card-bg);">
+                <div class="d-flex align-items-center flex-wrap">
+                    <div class="bg-primary text-white rounded-circle d-flex justify-content-center align-items-center shadow-sm" style="width: 80px; height: 80px; font-size: 2rem; font-weight: bold;">
+                        {{ user.first_name|slice:":1" }}{{ user.last_name|slice:":1" }}
+                    </div>
+                    <div class="ms-4">
+                        <h2 class="mb-0 fw-bold" style="color: var(--text-color);">{{ user.first_name }} {{ user.last_name }}</h2>
+                        <span class="badge bg-info mt-1">{{ user.get_role_display }}</span>
+                    </div>
+                    {% if request.user.is_authenticated and request.user.pk == user.pk %}
+                        <div class="ms-auto mt-2 mt-md-0">
+                            <a href="{% url 'edit_profile' user.pk %}" class="btn btn-outline-secondary btn-sm">
+                                <i class="fas fa-edit me-1"></i> Tahrirlash
+                            </a>
+                            <a href="{% url 'password_change' %}" class="btn btn-outline-warning btn-sm">
+                                <i class="fas fa-key me-1"></i> Parol
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="card shadow-sm p-4 border-0 rounded-3 mb-4" style="background-color: var(--card-bg);">
+                <h5 class="fw-bold" style="color: var(--text-color);"><i class="fas fa-user text-primary me-2"></i>Bio</h5>
+                <p style="color: var(--text-color);">{{ user.bio|default:"O'zingiz haqingizda ma'lumot kiriting..." }}</p>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <div class="card shadow-sm p-4 border-0 rounded-3 h-100" style="background-color: var(--card-bg);">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="fw-bold text-primary mb-0"><i class="fas fa-briefcase me-2"></i>Ish tajribasi</h5>
+                            {% if request.user.is_authenticated and request.user.pk == user.pk %}
+                            <a href="{% url 'add_experience' user.pk %}" class="btn btn-sm btn-outline-primary"><i class="fas fa-plus"></i></a>
+                            {% endif %}
+                        </div>
+                        {% for exp in experiences %}
+                            <div class="d-flex justify-content-between align-items-start mb-3 border-bottom pb-2" style="border-color: var(--border-color) !important;">
+                                <div>
+                                    <h6 class="fw-bold mb-0" style="color: var(--text-color);">{{ exp.position }}</h6>
+                                    <small class="text-muted">{{ exp.company_name }} | {{ exp.start_date|date:"Y" }}-{% if exp.end_date %}{{ exp.end_date|date:"Y" }}{% else %}Hozirgi vaqt{% endif %}</small>
+                                </div>
+                                <div>
+                                    <a href="{% url 'edit_experience' user.pk exp.pk %}" class="text-primary me-2"><i class="fas fa-edit"></i></a>
+                                    <a href="{% url 'delete_experience' user.pk exp.pk %}" class="text-danger"><i class="fas fa-trash"></i></a>
+                                </div>
+                            </div>
+                        {% empty %} <p style="color: var(--text-color);" class="small">Ma'lumot kiritilmagan.</p> {% endfor %}
+                    </div>
+                </div>
+
+                <div class="col-md-6 mb-4">
+                    <div class="card shadow-sm p-4 border-0 rounded-3 h-100" style="background-color: var(--card-bg);">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="fw-bold text-primary mb-0"><i class="fas fa-university me-2"></i>Ta'lim</h5>
+                            {% if request.user.is_authenticated and request.user.pk == user.pk %}
+                            <a href="{% url 'add_education' user.pk %}" class="btn btn-sm btn-outline-primary"><i class="fas fa-plus"></i></a>
+                            {% endif %}
+                        </div>
+                        {% for edu in educations %}
+                            <div class="d-flex justify-content-between align-items-start mb-3 border-bottom pb-2" style="border-color: var(--border-color) !important;">
+                                <div>
+                                    <h6 class="fw-bold mb-0" style="color: var(--text-color);">{{ edu.university_name }}</h6>
+                                    <small class="text-muted">{{ edu.degree }} | {{ edu.start_date|date:"Y" }}-{{ edu.end_date|date:"Y" }}</small>
+                                </div>
+                                <div>
+                                    {% if request.user.is_authenticated and request.user.pk == user.pk %}
+                                    <a href="{% url 'edit_education' user.pk edu.pk %}" class="text-primary me-2"><i class="fas fa-edit"></i></a>
+                                    <a href="{% url 'delete_education' user.pk edu.pk %}" class="text-danger"><i class="fas fa-trash"></i></a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% empty %} <p style="color: var(--text-color);" class="small">Ma'lumot kiritilmagan.</p> {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow-sm p-4 border-0 rounded-3 mb-4" style="background-color: var(--card-bg);">
+                <div class="mb-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="fw-bold text-primary mb-0"><i class="fas fa-tools me-2"></i>Ko'nikmalar</h5>
+                        {% if request.user.is_authenticated and request.user.pk == user.pk %}
+                        <a href="{% url 'add_skill' user.pk %}" class="btn btn-sm btn-outline-primary"><i class="fas fa-plus"></i></a>
+                        {% endif %}
+                    </div>
+                    {% for s in skills %} 
+                        <span class="badge bg-secondary m-1">
+                            {{ s.skill.name }}
+                            {% if request.user.is_authenticated and request.user.pk == user.pk %}
+                            <a href="{% url 'delete_skill' user.pk s.pk %}" class="text-white ms-1"><i class="fas fa-times"></i></a>
+                            {% endif %}
+                        </span> 
+                    {% endfor %}
+                </div>
+                <div>
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="fw-bold text-primary mb-0"><i class="fas fa-language me-2"></i>Tillar</h5>
+                        {% if request.user.is_authenticated and request.user.pk == user.pk %}
+                        <a href="{% url 'add_language' user.pk %}" class="btn btn-sm btn-outline-primary"><i class="fas fa-plus"></i></a>
+                        {% endif %}
+                    </div>
+                    {% for l in languages %} 
+                        <span class="badge bg-info text-dark m-1">
+                            {{ l.language.name }} ({{ l.level.level_name }})
+                            {% if request.user.is_authenticated and request.user.pk == user.pk %}
+                            <a href="{% url 'delete_language' user.pk l.pk %}" class="text-dark ms-1"><i class="fas fa-times"></i></a>
+                            {% endif %}
+                        </span> 
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="card shadow-sm p-4 border-0 rounded-3 mb-4" style="background-color: var(--card-bg);">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="fw-bold text-primary mb-0"><i class="fas fa-folder-open me-2"></i>Portfolio va Sertifikatlar</h5>
+                    <div>
+                        {% if request.user.is_authenticated and request.user.pk == user.pk %}
+                        <a href="{% url 'add_portfolio' user.pk %}" class="btn btn-sm btn-outline-primary"><i class="fas fa-plus"></i></a>
+                        <a href="{% url 'add_certificate' user.pk %}" class="btn btn-sm btn-outline-warning"><i class="fas fa-plus"></i></a>
+                        {% endif %}
+                    </div>
+                </div>
+                <ul class="list-unstyled">
+                    {% for p in portfolios %}
+                        <li class="d-flex justify-content-between mb-2" style="color: var(--text-color);">
+                            <span><i class="fas fa-link me-2"></i> <a href="{{ p.link }}" target="_blank">{{ p.project_name }}</a></span>
+                            <span>
+                                {% if request.user.is_authenticated and request.user.pk == user.pk %}
+                                <a href="{% url 'edit_portfolio' user.pk p.pk %}" class="text-primary me-2"><i class="fas fa-edit"></i></a>
+                                <a href="{% url 'delete_portfolio' user.pk p.pk %}" class="text-danger"><i class="fas fa-trash"></i></a>
+                                {% endif %}
+                            </span>
+                        </li>
+                    {% endfor %}
+                    {% for c in certificates %}
+                        <li class="d-flex justify-content-between text-warning">
+                            <span><i class="fas fa-certificate me-2"></i> {{ c.title }}</span>
+                            <span>
+                                {% if request.user.is_authenticated and request.user.pk == user.pk %}
+                                <a href="{% url 'edit_certificate' user.pk c.pk %}" class="text-primary me-2"><i class="fas fa-edit"></i></a>
+                                <a href="{% url 'delete_certificate' user.pk c.pk %}" class="text-danger"><i class="fas fa-trash"></i></a>
+                                {% endif %}
+                            </span>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm p-3 border-0 rounded-3 mb-4" style="background-color: var(--card-bg);">
+                <h5 class="mb-3 fw-bold" style="color: var(--text-color);">Rezyume</h5>
+                {% if user.resume_url %}
+                    <a href="{{ user.resume_url.url }}" class="btn btn-outline-success w-100"><i class="fas fa-download me-1"></i> Yuklab olish</a>
+                {% else %}
+                    <div class="alert alert-danger p-2 small mb-3">Rezyume yuklanmagan</div>
+                    {% if request.user.is_authenticated and request.user.pk == user.pk %}
+                    <a href="{% url 'edit_profile' user.pk %}" class="btn btn-primary w-100">Yuklash</a>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

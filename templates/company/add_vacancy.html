@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow border-0 rounded-4" style="background-color: var(--card-bg);">
+                <div class="card-header bg-primary text-white py-3 rounded-top-4">
+                    <h4 class="mb-0 text-center"><i class="fas fa-plus-circle me-2"></i>Yangi vakansiya qo'shish</h4>
+                </div>
+                <div class="card-body p-4">
+                    <form method="post" class="vacancy-form">
+                        {% csrf_token %}
+                        
+                        <div class="mb-3">
+                            <label class="form-label fw-bold" style="color: var(--text-color);">{{ form.title.label }}</label>
+                            {{ form.title }}
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold" style="color: var(--text-color);">{{ form.description.label }}</label>
+                            {{ form.description }}
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold" style="color: var(--text-color);">{{ form.salary_range.label }}</label>
+                                {{ form.salary_range }}
+                            </div>
+                            <div class="col-md-6 mb-3 d-flex align-items-center mt-4">
+                                <div class="form-check">
+                                    {{ form.is_active }}
+                                    <label class="form-check-label ms-2" for="{{ form.is_active.id_for_label }}" style="color: var(--text-color);">
+                                        Vakansiya faolmi?
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2 mt-4">
+                            <button type="submit" class="btn btn-primary btn-lg fw-bold">E'lon qilish</button>
+                            <a href="{% url 'profile' request.user.pk %}" class="btn btn-outline-secondary">Bekor qilish</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Vakansiya formasi inputlarini tungi rejimga moslash */
+    [data-theme='dark'] .vacancy-form input,
+    [data-theme='dark'] .vacancy-form textarea,
+    [data-theme='dark'] .vacancy-form select {
+        background-color: #2d2d2d !important;
+        border-color: #444 !important;
+        color: #fff !important;
+    }
+    [data-theme='dark'] .vacancy-form input:focus,
+    [data-theme='dark'] .vacancy-form textarea:focus {
+        border-color: var(--primary-color) !important;
+    }
+</style>
+{% endblock %}
