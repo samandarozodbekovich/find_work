@@ -1,40 +1,44 @@
-{% extends 'base.html' %}
+﻿{% extends 'base.html' %}
 {% block content %}
-<div class="container mt-5">
+<div class="container py-5">
     <div class="row justify-content-center">
-        <div class="col-md-6 card shadow-sm p-4" style="background-color: var(--card-bg);">
-            <h4 class="mb-4 fw-bold" style="color: var(--text-color);">{{ title }}</h4>
-            
-            <form method="post" enctype="multipart/form-data" class="custom-form">
-                {% csrf_token %}
-                {{ form.as_p }}
-                
-                <div class="d-flex justify-content-between mt-4">
-                    <a href="{% url 'profile' user.pk %}" class="btn btn-secondary">Bekor qilish</a>
-                    
-                    <div>
-                        <button type="submit" name="add_another" class="btn btn-outline-primary me-2">
-                            Saqlash va yana qo'shish
-                        </button>
-                        <button type="submit" class="btn btn-primary">Saqlash</button>
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
+                <div class="card-body p-4">
+                    <div class="text-center mb-4">
+                        <span class="badge bg-primary rounded-pill px-4 py-2 mb-3">Yangi vakansiya</span>
+                        <h4 class="mb-2 fw-bold">{{ title }}</h4>
+                        <p class="text-muted mb-0">Vakansiya ma'lumotlarini kiritib, e'lonni nashr qiling.</p>
                     </div>
+
+                    <form method="post" enctype="multipart/form-data" class="account-form">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+
+                        <div class="d-flex flex-column flex-sm-row justify-content-between gap-3 mt-4">
+                            <a href="{% url 'profile' user.pk %}" class="btn btn-outline-secondary w-100 w-sm-auto" style="padding-top: 18px;">Bekor qilish</a>
+                            <div class="d-flex gap-2 w-100">
+                                <button type="submit" name="add_another" class="btn btn-outline-primary flex-fill">Saqlash va yana qo'shish</button>
+                                <button type="submit" class="btn btn-primary flex-fill">Saqlash</button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
-            </form>
+            </div>
         </div>
     </div>
 </div>
 
 <style>
-    /* Form elementlarini tungi rejimda oqqa o'girish */
-    [data-theme='dark'] .custom-form p {
-        color: var(--text-color);
+    .account-form p {
+        margin-bottom: 1rem;
     }
-    [data-theme='dark'] .custom-form input,
-    [data-theme='dark'] .custom-form select,
-    [data-theme='dark'] .custom-form textarea {
-        background-color: #2d2d2d !important;
-        border-color: #444 !important;
-        color: #fff !important;
+    [data-theme='dark'] .account-form input,
+    [data-theme='dark'] .account-form select,
+    [data-theme='dark'] .account-form textarea {
+        background-color: rgba(15, 23, 42, 0.88) !important;
+        border-color: rgba(148, 163, 184, 0.24) !important;
+        color: #f8fafc !important;
     }
 </style>
 {% endblock %}

@@ -1,38 +1,34 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container mt-5">
+<div class="container auth-page">
     <div class="row justify-content-center">
-        <div class="col-md-6 p-4 shadow-sm rounded" style="background-color: var(--card-bg);">
-            <h2 class="text-center mb-4" style="color: var(--text-color);">Ro'yxatdan o'tish</h2>
-            <form method="post" class="register-form">
-                {% csrf_token %}
-                {% for field in form %}
-                    <div class="mb-3">
-                        <label class="form-label" style="color: var(--text-color);">{{ field.label }}</label>
-                        {{ field }}
-                        {% if field.errors %}
-                            <div class="text-danger small">{{ field.errors }}</div>
-                        {% endif %}
-                    </div>
-                {% endfor %}
-                <button type="submit" class="btn btn-primary w-100 mt-3">Tasdiqlash</button>
-            </form>
+        <div class="col-md-6 col-lg-5">
+            <div class="auth-card mx-auto">
+                <div class="text-center mb-4">
+                    <h2 class="fw-bold">Ro'yxatdan o'tish</h2>
+                    <p class="text-muted mb-0">Hisob oching va o'zingizga mos bo'lgan vakansiyalarni qidiring.</p>
+                </div>
+                <form method="post">
+                    {% csrf_token %}
+                    {% for field in form %}
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">{{ field.label }}</label>
+                            {{ field }}
+                            {% if field.errors %}
+                                <div class="text-danger small mt-1">{{ field.errors }}</div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                    <button type="submit" class="btn btn-primary w-100 btn-lg fw-bold">Ro'yxatdan o'tish</button>
+                </form>
+                <div class="text-center mt-3">
+                    <p class="small text-muted mb-0">Allaqachon ro'yxatdan o'tganmisiz?
+                        <a href="{% url 'login' %}" class="text-primary fw-bold text-decoration-none">Kirish</a>
+                    </p>
+                </div>
+            </div>
         </div>
     </div>
 </div>
-
-<style>
-    /* Ro'yxatdan o'tish formasi inputlarini tungi rejimga moslash */
-    [data-theme='dark'] .register-form input,
-    [data-theme='dark'] .register-form select,
-    [data-theme='dark'] .register-form textarea {
-        background-color: #2d2d2d !important;
-        border-color: #444 !important;
-        color: #fff !important;
-    }
-    [data-theme='dark'] .register-form input:focus {
-        border-color: var(--primary-color) !important;
-    }
-</style>
 {% endblock %}

@@ -1,78 +1,135 @@
-{% extends 'base.html' %}
+﻿{% extends 'base.html' %}
 {% load hitcount_tags %}
 
 {% block content %}
-    <div class="p-5 mb-4 custom-banner rounded-3 text-center shadow-sm">
-        <div class="container-fluid py-5">
-            <h1 class="display-5 fw-bold text-primary">Orzuingizdagi ishni toping</h1>
-            <p class="col-md-8 mx-auto fs-5" style="color: var(--text-color);">Bitiruvchilar va mutaxassislar uchun eng yaxshi vakansiyalar shu yerda.</p>
-            
-            <form action="{% url 'vacancy_list' %}" method="GET" class="mt-4 d-flex justify-content-center">
-                <input type="text" name="q" 
-                    class="form-control w-50 shadow-sm" 
-                    style="background-color: var(--bg-color); color: var(--text-color); border-color: var(--border-color);" 
-                    placeholder="Lavozim yoki kompaniya nomi...">
-                
-                <button type="submit" class="btn btn-primary ms-2 px-4 shadow-sm">Izlash</button>
-            </form>
-        </div>
-    </div>
-
-<div class="container">
-    <section class="mb-5">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2 class="fw-bold" style="color: var(--text-color);">Eng so'nggi vakansiyalar</h2>
-            <a href="{% url 'vacancy_list' %}" class="text-decoration-none text-primary">Barchasini ko'rish →</a>
-        </div>
-        <div class="row g-4">
-            {% for vacancy in vacancies %}
-            <div class="col-md-4">
-                <div class="card h-100 shadow-sm border-0 transition-hover" style="background-color: var(--card-bg);">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-start mb-2">
-                            <h5 class="card-title fw-bold text-primary mb-0">{{ vacancy.title }}</h5>
-                        </div>
-                        <h6 class="card-subtitle mb-3" style="color: var(--text-color); opacity: 0.7;">
-                            <i class="fas fa-building me-1 small"></i> {{ vacancy.company.company_name }}
-                        </h6>
-                        
-                        <p class="card-text small mb-3" style="color: var(--text-color); opacity: 0.8;">
-                            {{ vacancy.description|truncatewords:12 }}
-                        </p>
-
-                        <div class="d-flex gap-3 mt-auto pt-2 border-top" style="border-color: var(--border-color) !important;">
-                            <span class="small" style="color: var(--text-color); opacity: 0.6;">
-                                <i class="fas fa-eye me-1 text-info"></i> {% get_hit_count for vacancy %}
-                            </span>
-                            <span class="small" style="color: var(--text-color); opacity: 0.6;">
-                                <i class="fas fa-comments me-1 text-warning"></i> {{ vacancy.comments.count }}
-                            </span>
-                        </div>
-                    </div>
-                    <div class="card-footer bg-transparent border-0 pb-3">
-                        <a href="{% url 'vacancy_detail' vacancy.pk %}" class="btn btn-outline-primary w-100 rounded-pill">Batafsil</a>
+    <section class="hero-section py-5 mb-5">
+        <style>
+            .hero-section {
+                background: linear-gradient(135deg, rgba(79, 70, 229, 0.08) 0%, rgba(99, 102, 241, 0.05) 50%, rgba(167, 139, 250, 0.03) 100%);
+                border-radius: 2rem;
+                position: relative;
+                overflow: hidden;
+            }
+            .hero-section::before {
+                content: '';
+                position: absolute;
+                top: -50%;
+                right: -10%;
+                width: 600px;
+                height: 600px;
+                background: radial-gradient(circle, rgba(99, 102, 241, 0.08), transparent 70%);
+                border-radius: 50%;
+                pointer-events: none;
+            }
+            .hero-section::after {
+                content: '';
+                position: absolute;
+                bottom: -40%;
+                left: -5%;
+                width: 500px;
+                height: 500px;
+                background: radial-gradient(circle, rgba(147, 51, 234, 0.06), transparent 70%);
+                border-radius: 50%;
+                pointer-events: none;
+            }
+            article.card {
+                transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+            }
+            article.card:hover {
+                transform: translateY(-6px);
+                box-shadow: 0 20px 50px rgba(99, 102, 241, 0.15);
+                border-color: rgba(99, 102, 241, 0.25) !important;
+            }
+        </style>
+        <div class="container">
+            <div class="row align-items-center gx-5 position-relative z-1">
+                <div class="col-lg-7">
+                    <div class="hero-card p-5 rounded-4 shadow-lg" style="background: rgba(255,255,255,0.96); backdrop-filter: blur(10px); border: 1px solid rgba(99,102,241,0.15);">
+                        <span class="badge badge-soft mb-3" style="color: #0f172a;">✨ Orzuingizdagi ishni toping</span>
+                        <h1 class="display-5 fw-bold mb-3" style="color: #0f172a; line-height: 1.3;">Eng yaxshi vakansiyalar, professional kompaniyalar va to'g'ri imkoniyatlar.</h1>
+                        <p class="lead mb-4" style="color: #4b5563; font-size: 1.15rem;">Bitiruvchilar va mutaxassislar uchun oson ariza topshirish, profilingizni yangilash va ish joyini tez topish.</p>
+                        <form action="{% url 'vacancy_list' %}" method="GET" class="row g-2">
+                            <div class="col-md-7">
+                                <input type="text" name="q" class="form-control form-control-lg" placeholder="Lavozim yoki kompaniya nomi..." style="border: 2px solid rgba(99,102,241,0.2); font-size: 1rem;">
+                            </div>
+                            <div class="col-md-3">
+                                <button type="submit" class="btn btn-primary btn-lg w-100" style="font-size: 1rem; letter-spacing: 0.5px;">🔍 Izlash</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
+                <div class="col-lg-5">
+                    <div class="hero-panel p-4 rounded-4 shadow" style="background: linear-gradient(135deg, rgba(255,255,255,0.98), rgba(251,254,255,0.98)); border: 1px solid rgba(99,102,241,0.1);">
+                        <h3 class="h5 fw-bold mb-3" style="color: #0f172a;">🎯 Nega JobPortal?</h3>
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-3" style="color: #4b5563;"><i class="fas fa-check-circle text-primary me-2"></i> <strong>Ish qidiruvi va filtrlar</strong> bir joyda</li>
+                            <li class="mb-3" style="color: #4b5563;"><i class="fas fa-check-circle text-primary me-2"></i> <strong>Oson ariza yuborish</strong> va profilingizni boshqarish</li>
+                            <li style="color: #4b5563;"><i class="fas fa-check-circle text-primary me-2"></i> <strong>Kompaniya va vakansiyalar</strong> yangilari har kuni</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="container mb-5">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4 gap-3">
+            <div>
+                <h2 class="fw-bold mb-1" style="color: #0f172a; font-size: 2rem;">🔥 Eng so'nggi vakansiyalar</h2>
+                <p class="mb-0" style="color: #4b5563; font-size: 1.05rem;">Iltimos, sizga mos keladigan yangi ish imkoniyatlarini tanlang.</p>
+            </div>
+            <a href="{% url 'vacancy_list' %}" class="btn btn-outline-primary btn-sm" style="color: #4338ca;">Barchasini ko'rish →</a>
+        </div>
+
+        <div class="row g-4">
+            {% for vacancy in vacancies %}
+            <div class="col-md-6 col-xl-4">
+                <article class="card h-100 overflow-hidden border-0 shadow-sm" style="transition: all 0.3s ease; border: 1px solid rgba(99,102,241,0.1);">
+                    <div class="card-body d-flex flex-column">
+                        <div class="mb-3">
+                            <span class="badge badge-soft" style="background: linear-gradient(135deg, rgba(99,102,241,0.15), rgba(139,92,246,0.1)); color: #4338ca;">
+                                {% if vacancy.category %}
+                                    {{ vacancy.category.name }}
+                                {% else %}
+                                    💼 Vakansiya
+                                {% endif %}
+                            </span>
+                        </div>
+                        <h3 class="h5 fw-bold mb-2" style="color: #0f172a;">{{ vacancy.title }}</h3>
+                        <p style="color: #4b5563; font-size: 0.95rem;"><i class="fas fa-building me-2"></i>{{ vacancy.company.company_name }}</p>
+                        <p style="color: #64748b; font-size: 0.9rem;">{{ vacancy.description|truncatewords:14 }}</p>
+                        <div class="mt-auto pt-3 border-top" style="border-color: rgba(99,102,241,0.08);">
+                            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                                <span style="color: #64748b; font-size: 0.85rem;"><i class="fas fa-eye me-1"></i>{% get_hit_count for vacancy %}</span>
+                                <span style="color: #64748b; font-size: 0.85rem;"><i class="fas fa-comments me-1"></i>{{ vacancy.comments.count }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-transparent border-0 pt-0 pb-4 px-4">
+                        <a href="{% url 'vacancy_detail' vacancy.pk %}" class="btn btn-outline-primary w-100" style="color: #4338ca; border-color: rgba(67,56,202,0.3);">Batafsil</a>
+                    </div>
+                </article>
             </div>
             {% endfor %}
         </div>
     </section>
 
-    <section class="mb-5 p-4 rounded-4 shadow-sm" style="background-color: var(--card-bg); transition: background-color 0.3s;">
-        <h2 class="fw-bold mb-4" style="color: var(--text-color);">Hamkor kompaniyalar</h2>
-        <div class="d-flex flex-wrap gap-3">
-            {% for company in companies %}
-            <span class="p-3 border rounded-pill shadow-sm" style="background-color: var(--bg-color); color: var(--text-color); border-color: var(--border-color); transition: 0.3s;">
-                <i class="fas fa-building me-2 text-primary"></i> {{ company.company_name }}
-            </span>
-            {% endfor %}
+    <section class="container mb-5">
+        <div class="card p-5 border-0 shadow-sm" style="background: linear-gradient(135deg, rgba(79,70,229,0.05) 0%, rgba(99,102,241,0.03) 100%); border: 1px solid rgba(99,102,241,0.1);">
+            <div class="row align-items-center g-4">
+                <div class="col-lg-4">
+                    <h2 class="fw-bold mb-3" style="color: #0f172a; font-size: 1.8rem;">🏢 Hamkor kompaniyalar</h2>
+                    <p style="color: #4b5563; font-size: 1rem;">Sizni qidirayotgan va professional kadrlarga e'tibor beruvchi kompaniyalar.</p>
+                </div>
+                <div class="col-lg-8">
+                    <div class="d-flex flex-wrap gap-2">
+                        {% for company in companies %}
+                        <span class="badge badge-soft px-4 py-3 rounded-pill" style="background: rgba(99,102,241,0.12); color: #4338ca; border: 1px solid rgba(99,102,241,0.2);">{{ company.company_name }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
-</div>
-
-<style>
-    .transition-hover { transition: all 0.3s ease; }
-    .transition-hover:hover { transform: translateY(-7px); }
-    .card-footer .btn { font-weight: 500; }
-</style>
 {% endblock %}
+

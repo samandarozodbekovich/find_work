@@ -17,6 +17,7 @@ class VacancyListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['cities'] = City.objects.all() # Filtrlash uchun shaharlarni yuboramiz
+        context['regions'] = City.objects.values_list('region', flat=True).distinct()  # Regionlarni olish
         return context
 
     def get_queryset(self):
@@ -24,11 +25,26 @@ class VacancyListView(ListView):
         
         query = self.request.GET.get('q')
         city_id = self.request.GET.get('city')
+        region = self.request.GET.get('region')
+        job_type = self.request.GET.get('job_type')
+        salary_min = self.request.GET.get('salary_min')
+        salary_max = self.request.GET.get('salary_max')
+        experience_years = self.request.GET.get('experience_years')
         
         if query:
             queryset = queryset.filter(title__icontains=query)
         if city_id:
             queryset = queryset.filter(company__city_id=city_id)
+        if region:
+            queryset = queryset.filter(company__city__region=region)
+        if job_type:
+            queryset = queryset.filter(job_type=job_type)
+        if salary_min:
+            queryset = queryset.filter(salary_min__gte=salary_min)
+        if salary_max:
+            queryset = queryset.filter(salary_max__lte=salary_max)
+        if experience_years:
+            queryset = queryset.filter(experience_years=experience_years)
             
         return queryset
 

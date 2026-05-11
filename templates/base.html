@@ -1,189 +1,431 @@
-{% load notification_tags %}
+﻿{% load notification_tags %}
 <!DOCTYPE html>
 <html lang="uz">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JobPortal | Ishga Joylashish Platformasi</title>
-    
+
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    
+
     <style>
         :root {
-            --bg-color: #f8fafc;
-            --card-bg: #ffffff;
-            --text-color: #212529;
-            --navbar-bg: #ffffff;
-            --border-color: #e2e8f0;
+            --bg-color: #eef3ff;
+            --surface: #ffffff;
+            --surface-strong: #f8fafc;
+            --text-primary: #0f172a;
+            --text-muted: #64748b;
+            --primary: #4338ca;
+            --primary-soft: rgba(67, 56, 202, 0.14);
+            --border: rgba(15, 23, 42, 0.12);
+            --shadow: 0 24px 70px rgba(15, 23, 42, 0.08);
+            --card-bg: var(--surface-strong);
+            --text-color: var(--text-primary);
+            --border-color: var(--border);
         }
-        [data-theme='dark'] {
-            --bg-color: #0f172a;
-            --card-bg: #1e293b;
-            --text-color: #f1f5f9;
-            --navbar-bg: #1e293b;
-            --border-color: #334155;
+
+        * { box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(180deg, #eef2ff 0%, #f8fafc 50%, #ffffff 100%);
+            color: var(--text-primary);
         }
-        body { background-color: var(--bg-color); color: var(--text-color); }
-        .card { background-color: var(--card-bg); border-color: var(--border-color); }
-        .navbar { background-color: var(--navbar-bg) !important; }
-        
-        /* Navbar */
-        .navbar { border-bottom: 2px solid #e2e8f0; padding: 0.8rem 0; }
-        .nav-link { color: #475569; font-weight: 500; transition: color 0.3s; }
-        .nav-link:hover { color: var(--primary); }
-        
-        /* Main */
-        main { flex: 1; padding: 2rem 0; }
-        
-        /* Footer */
-        .footer-link { color: #94a3b8; text-decoration: none; transition: color 0.3s; }
-        .footer-link:hover { color: #fff; }
-        .social-link { color: #94a3b8; transition: color 0.3s; }
-        .social-link:hover { color: var(--primary); }
+
+        .navbar,
+        .footer,
+        .card,
+        .hero-card,
+        .hero-panel,
+        .dropdown-menu,
+        .dropdown-item,
+        .form-control,
+        .form-select,
+        .btn,
+        .badge-soft {
+            color: var(--text-primary);
+        }
+        .text-muted {
+            color: #374151 !important;
+        }
+        .text-dark {
+            color: var(--text-primary) !important;
+        }
+        .bg-light {
+            background-color: rgba(255, 255, 255, 0.08) !important;
+        }
+        .lead {
+            color: #4b5563 !important;
+            font-weight: 500;
+        }
+
+        a { color: inherit; text-decoration: none; }
+        .navbar, .footer, .card, .modal-content, .dropdown-menu { background: var(--surface); border-color: var(--border); }
+        .navbar {
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            padding: 1rem 0.85rem;
+            backdrop-filter: blur(14px);
+        }
+        .navbar-collapse {
+            align-items: center;
+        }
+        .navbar-nav {
+            margin-bottom: 0;
+        }
+
+        .navbar-brand {
+            color: var(--primary) !important;
+            font-size: 1.35rem;
+        }
+        .navbar .nav-link {
+            color: var(--text-muted);
+            font-weight: 500;
+            transition: color 0.25s ease;
+        }
+        .navbar .nav-link:hover,
+        .navbar .nav-link:focus { color: var(--primary); }
+
+        .form-control, .form-select, .btn {
+            border-radius: 999px;
+        }
+        .navbar-search-form {
+            min-width: 0;
+            flex: 1 1 260px;
+            max-width: 420px;
+            flex-wrap: wrap;
+        }
+        .navbar-search-input-group {
+            border-radius: 999px;
+            overflow: hidden;
+            width: 100%;
+            min-width: 0;
+        }
+        .navbar-search-input-group .form-control,
+        .navbar-search-input-group .form-select {
+            min-width: 0;
+        }
+        .navbar-search-input-group .form-select {
+            width: auto;
+        }
+        .form-control {
+            border: 1px solid var(--border);
+            background: rgba(255,255,255,0.96);
+        }
+
+        .auth-page {
+            padding: 4rem 0;
+        }
+        .auth-card {
+            background: var(--surface-strong);
+            border: 1px solid var(--border);
+            border-radius: 1.5rem;
+            box-shadow: var(--shadow);
+            padding: 2rem;
+        }
+        .auth-card h2,
+        .auth-card h3,
+        .auth-card h4 {
+            color: var(--text-primary);
+        }
+        .auth-card .form-label {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+        .auth-card .text-muted {
+            color: var(--text-muted);
+        }
+        .auth-card a {
+            color: var(--primary);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #4f46e5, #6366f1);
+            border: none;
+            box-shadow: 0 12px 28px rgba(99, 102, 241, 0.2);
+            transition: all 0.3s ease;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 16px 40px rgba(99, 102, 241, 0.35);
+        }
+        .btn-outline-primary {
+            border-color: rgba(79, 70, 229, 0.32);
+            color: var(--primary);
+        }
+        .btn-outline-primary:hover { background: rgba(79, 70, 229, 0.08); }
+
+        main {
+            min-height: calc(100vh - 220px);
+            padding: 2.5rem 0 3rem;
+        }
+        .card {
+            border: 1px solid var(--border);
+            border-radius: 1.35rem;
+            box-shadow: var(--shadow);
+        }
+        .badge-soft {
+            display: inline-flex;
+            align-items: center;
+            gap: .35rem;
+            padding: .65rem 1rem;
+            border-radius: 999px;
+            background: var(--primary-soft);
+            color: var(--primary);
+            font-size: .82rem;
+            font-weight: 600;
+        }
+
+        .footer-link, .social-link { color: var(--text-muted); transition: color 0.25s ease; }
+        .footer-link:hover, .social-link:hover { color: var(--primary); }
+
+        .hero-card,
+        .hero-panel,
+        .card {
+            background: var(--surface-strong);
+        }
+        .list-group-item {
+            background: var(--surface-strong);
+            color: var(--text-primary);
+        }
+        .hero-panel {
+            background: rgba(255,255,255,0.92);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+        }
+        .hero-panel h3 {
+            color: var(--primary);
+        }
+        .hero-panel ul,
+        .hero-panel li {
+            color: var(--text-primary);
+        }
+        .hero-panel .text-muted {
+            color: var(--text-muted) !important;
+        }
+        .hero-panel li .fa-check-circle {
+            color: var(--primary);
+        }
+        .hero-card {
+            background: rgba(255,255,255,0.98);
+        }
+        .card {
+            border: 1px solid var(--border);
+        }
+
+        .hero-panel {
+            background: rgba(255,255,255,0.06);
+            border-color: rgba(148, 163, 184, 0.24);
+            color: var(--text-primary);
+        }
+        .hero-panel h3,
+        .hero-panel ul,
+        .hero-panel li,
+        .hero-panel .text-muted {
+            color: var(--text-primary) !important;
+        }
+        .hero-panel li .fa-check-circle {
+            color: #93c5fd !important;
+        }
+        .hero-card {
+            background: rgba(255,255,255,0.98);
+        }
+        .card {
+            background: var(--surface);
+            border-color: rgba(148, 163, 184, 0.24);
+        }
+        .list-group-item {
+            background: var(--surface);
+            color: var(--text-primary);
+            border-color: rgba(148, 163, 184, 0.16);
+        }
+        .badge-soft {
+            background: rgba(129, 140, 248, 0.16);
+            color: #edf2ff;
+        }
+        .btn-outline-primary {
+            border-color: rgba(129, 140, 248, 0.4);
+            color: #c7d2fe;
+        }
+        .btn-outline-primary:hover {
+            background: rgba(129, 140, 248, 0.12);
+        }
+        .dropdown-menu {
+            border-radius: 1rem;
+            box-shadow: 0 24px 60px rgba(15, 23, 42, 0.12);
+        }
+        .notification-badge {
+            font-size: 0.65rem;
+            transform: translate(25%, -15%);
+        }
+        .footer {
+            background: linear-gradient(135deg, #ffffff 0%, rgba(240, 249, 255, 0.7) 50%, rgba(219, 234, 254, 0.5) 100%);
+            border-top: 1px solid rgba(186, 225, 255, 0.4);
+            margin-top: auto;
+            color: #0f172a;
+        }
+        .footer h5,
+        .footer h6 {
+            color: #0f172a;
+            font-weight: 700;
+            font-size: 1.05rem;
+        }
+        .footer p {
+            color: #374151;
+        }
+        .footer-link {
+            color: #4b5563;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        .footer-link:hover {
+            color: #4338ca;
+            transform: translateX(3px);
+        }
+        .footer-link::before {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(135deg, #4338ca, #6366f1);
+            transition: width 0.3s ease;
+        }
+        .footer-link:hover::before {
+            width: 100%;
+        }
+        .social-link {
+            color: #4b5563;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(99, 102, 241, 0.08);
+        }
+        .social-link:hover {
+            color: #4338ca;
+            background: rgba(99, 102, 241, 0.18);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(99, 102, 241, 0.15);
+        }
+        .footer hr {
+            border-color: rgba(99, 102, 241, 0.15) !important;
+        }
+        .footer .text-muted {
+            color: #64748b !important;
+        }
     </style>
 </head>
 <body>
 
-    <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top">
+    <nav class="navbar navbar-expand-lg navbar-light sticky-top">
         <div class="container">
-            <a class="navbar-brand fw-bold text-primary" href="/">JobPortal</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <a class="navbar-brand fw-bold" href="/">JobPortal</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item"><a href="/" class="nav-link">Bosh sahifa</a></li>
-                    <li class="nav-item"><a href="{% url 'vacancy_list' %}" class="nav-link">Vakansiyalar</a></li>
-                </ul>
-                <form action="{% url 'search_result' %}" method="get" class="me-auto ms-lg-4 d-flex align-items-center">
-                    <div class="input-group">
-                        <input type="text" name="q" class="form-control form-control-sm border-end-0 rounded-start-pill px-3" 
-                            placeholder="Ish qidirish..." style="width: 180px;" value="{{ request.GET.q }}">
-                        
-                        <select name="city" class="form-select form-select-sm border-start-0 border-end-0" style="width: 130px; border-left: 1px solid #dee2e6;">
-                            <option value="">Barcha shahar</option>
-                            {% for city in cities %}
-                                <option value="{{ city.id }}" {% if request.GET.city == city.id|stringformat:"i" %}selected{% endif %}>
-                                    {{ city.name }}
-                                </option>
-                            {% endfor %}
-                        </select>
 
-                        <button class="btn btn-outline-secondary btn-sm border-start-0 rounded-end-pill px-3" type="submit">
-                            <i class="fas fa-search"></i>
-                        </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link" href="/">Bosh sahifa</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'vacancy_list' %}">Vakansiyalar</a></li>
+                </ul>
+
+                <form action="{% url 'search_result' %}" method="get" class="navbar-search-form d-flex align-items-center gap-2">
+                    <div class="input-group shadow-sm navbar-search-input-group">
+                        <input type="text" name="q" class="form-control form-control-sm" placeholder="Ish qidirish..." value="{{ request.GET.q }}">
+                        <button class="btn btn-primary btn-sm" type="submit"><i class="fas fa-search"></i></button>
                     </div>
                 </form>
-                
-                <div class="d-flex align-items-center">
-                    {% if user.is_authenticated %}
-                        <ul class="navbar-nav me-3">
-                            <li class="nav-item dropdown">
-                                <a class="nav-link position-relative" href="#" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="fas fa-bell"></i>
-                                    {% with count=user|unread_count %}
-                                        {% if count > 0 %}
-                                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.6rem;">
-                                                {{ count }}
-                                            </span>
-                                        {% endif %}
-                                    {% endwith %}
-                                </a>
-                                <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2" style="width: 250px;">
-                                    <li class="dropdown-header fw-bold">Bildirishnomalar</li>
-                                    <li><hr class="dropdown-divider"></li>
-                                    {% for note in user.notifications.all|slice:":5" %}
-                                        <li>
-                                            <a class="dropdown-item py-2 {% if not note.is_read %}bg-light{% endif %}" href="{{ note.link }}">
-                                                <small class="text-wrap">{{ note.message|truncatechars:40 }}</small>
-                                            </a>
-                                        </li>
-                                    {% empty %}
-                                        <li><span class="dropdown-item text-muted small">Yangi xabarlar yo'q</span></li>
-                                    {% endfor %}
-                                    <li><hr class="dropdown-divider"></li>
-                                    {% if user.is_authenticated %}
-                                        <li>
-                                            <a class="dropdown-item text-center text-primary small" href="{% url 'notification_list' user.pk %}">
-                                                Barchasini ko'rish
-                                            </a>
-                                        </li>
-                                    {% endif %}
-                                </ul>
-                            </li>
-                        </ul>
 
-                        <a href="{% url 'profile' user.pk %}" class="btn btn-outline-primary btn-sm me-3">Profilim</a>
-                        <form action="{% url 'logout' %}" method="post">
+                <div class="d-flex align-items-center gap-2 ms-3">
+                    {% if user.is_authenticated %}
+                        <div class="dropdown">
+                            <a class="nav-link position-relative text-muted" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-bell fa-lg"></i>
+                                {% with count=user|unread_count %}
+                                    {% if count > 0 %}
+                                        <span class="badge bg-danger rounded-pill position-absolute notification-badge">{{ count }}</span>
+                                    {% endif %}
+                                {% endwith %}
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end p-2">
+                                <li class="text-uppercase text-muted small mb-2">Bildirishnomalar</li>
+                                <li><hr class="dropdown-divider"></li>
+                                {% for note in user.notifications.all|slice:":5" %}
+                                    <li>
+                                        <a class="dropdown-item py-2 rounded-3 {% if not note.is_read %}bg-light{% endif %}" href="{{ note.link }}">
+                                            <small class="text-wrap text-dark">{{ note.message|truncatechars:40 }}</small>
+                                        </a>
+                                    </li>
+                                {% empty %}
+                                    <li><span class="dropdown-item text-muted small">Yangi xabarlar yo'q</span></li>
+                                {% endfor %}
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item text-primary small text-center" href="{% url 'notification_list' user.pk %}">Barchasini ko'rish</a></li>
+                            </ul>
+                        </div>
+
+                        <a href="{% url 'profile' user.pk %}" class="btn btn-outline-primary btn-sm">Profilim</a>
+                        <form action="{% url 'logout' %}" method="post" class="m-0">
                             {% csrf_token %}
                             <button type="submit" class="btn btn-danger btn-sm">Chiqish</button>
                         </form>
                     {% else %}
-                        <a href="{% url 'login' %}" class="nav-link me-3">Kirish</a>
+                        <a href="{% url 'login' %}" class="nav-link text-muted">Kirish</a>
                         <a href="{% url 'register' %}" class="btn btn-primary btn-sm">Ro'yxatdan o'tish</a>
                     {% endif %}
                 </div>
-                <button id="theme-toggle" class="btn btn-sm btn-outline-secondary rounded-pill me-3" style="margin-left: 10px;">
-                    <i class="fas fa-moon"></i>
-                </button>
             </div>
         </div>
     </nav>
 
     <main class="container">
-        {% block content %}
-        {% endblock %}
+        {% block content %}{% endblock %}
     </main>
 
-    <footer class="bg-dark text-white pt-5 pb-3">
+    <footer class="footer mt-auto py-5">
         <div class="container">
-            <div class="row">
-                <div class="col-md-4 mb-4">
-                    <h5 class="text-uppercase fw-bold mb-3">JobPortal</h5>
-                    <p class="text-secondary small">Bitiruvchilarni ish bilan ta'minlash va kompaniyalar uchun eng yaxshi kadrlarni topish platformasi.</p>
+            <div class="row gy-4">
+                <div class="col-md-4">
+                    <h5 class="fw-bold mb-3" style="color: #4338ca;">🚀 JobPortal</h5>
+                    <p class="small" style="color: #4b5563; line-height: 1.6;">Bitiruvchilarni ish bilan ta'minlash va kompaniyalar uchun eng yaxshi kadrlarni topish platformasi.</p>
                 </div>
-                <div class="col-md-4 mb-4">
-                    <h5 class="fw-bold mb-3">Sahifalar</h5>
+                <div class="col-md-4">
+                    <h6 class="fw-bold mb-3" style="color: #4338ca;">📄 Sahifalar</h6>
                     <ul class="list-unstyled">
-                        <li><a href="/" class="footer-link">Bosh sahifa</a></li>
-                        <li><a href="{% url 'vacancy_list' %}" class="footer-link">Vakansiyalar</a></li>
-                        <li><a href="#" class="footer-link">Kompaniyalar</a></li>
+                        <li class="mb-2"><a href="/" class="footer-link d-inline-block">Bosh sahifa</a></li>
+                        <li class="mb-2"><a href="{% url 'vacancy_list' %}" class="footer-link d-inline-block">Vakansiyalar</a></li>
+                        <li><a href="#" class="footer-link d-inline-block">Kompaniyalar</a></li>
                     </ul>
                 </div>
-                <div class="col-md-4 mb-4">
-                    <h5 class="fw-bold mb-3">Kontakt</h5>
-                    <p class="text-secondary small"><i class="fas fa-envelope me-2"></i> info@jobportal.uz</p>
-                    <p class="text-secondary small"><i class="fas fa-phone me-2"></i> +998 90 123 45 67</p>
-                    <div class="mt-3">
-                        <a href="#" class="social-link me-3"><i class="fab fa-telegram fa-lg"></i></a>
-                        <a href="#" class="social-link me-3"><i class="fab fa-instagram fa-lg"></i></a>
-                        <a href="#" class="social-link"><i class="fab fa-facebook fa-lg"></i></a>
+                <div class="col-md-4">
+                    <h6 class="fw-bold mb-3" style="color: #4338ca;">📞 Kontakt</h6>
+                    <p class="small mb-2" style="color: #4b5563;"><i class="fas fa-envelope me-2" style="color: #4338ca;"></i>info@jobportal.uz</p>
+                    <p class="small mb-3" style="color: #4b5563;"><i class="fas fa-phone me-2" style="color: #4338ca;"></i>+998 90 123 45 67</p>
+                    <div class="d-flex gap-2">
+                        <a href="#" class="social-link"><i class="fab fa-telegram"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-facebook"></i></a>
                     </div>
                 </div>
             </div>
-            <hr class="border-secondary">
-            <p class="text-center text-secondary small">&copy; 2026 JobPortal. Barcha huquqlar himoyalangan.</p>
+            <hr class="my-4">
+            <p class="text-center small mb-0" style="color: #64748b;">&copy; 2026 JobPortal. Barcha huquqlar himoyalangan.</p>
         </div>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        const toggleBtn = document.getElementById('theme-toggle');
-        const currentTheme = localStorage.getItem('theme') || 'light';
-
-        document.documentElement.setAttribute('data-theme', currentTheme);
-        toggleBtn.innerHTML = (currentTheme === 'dark') ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
-
-        toggleBtn.addEventListener('click', () => {
-            let theme = document.documentElement.getAttribute('data-theme');
-            let newTheme = (theme === 'dark') ? 'light' : 'dark';
-            
-            document.documentElement.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
-            toggleBtn.innerHTML = (newTheme === 'dark') ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
-        });
-    </script>
 </body>
 </html>

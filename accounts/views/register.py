@@ -10,7 +10,7 @@ def register_view(request):
             # Backend ni aniqlab o'tish shart
             from django.contrib.auth import authenticate
             login(request, user, backend='django.contrib.auth.backends.ModelBackend')
-            return redirect('home') # 'login' emas, 'home' ga yo'naltirish to'g'riroq
+            return redirect('profile') # 'login' emas, 'home' ga yo'naltirish to'g'riroq
     else:
         form = RegistrationForm()
     return render(request, 'registration/register.html', {'form': form})

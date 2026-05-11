@@ -1,58 +1,65 @@
-{% extends 'base.html' %}
+﻿{% extends 'base.html' %}
 
 {% block content %}
-<div class="container mt-5">
+<div class="container py-5">
     <div class="row justify-content-center">
         <div class="col-md-10">
-            <div class="card shadow-sm p-4 border-0 rounded-3" style="background-color: var(--card-bg);">
-                <h2 class="mb-4 fw-bold" style="color: var(--text-color);">Profilni tahrirlash</h2>
-                
-                <form method="post" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    
-                    <h5 class="text-primary mt-4 mb-3">Shaxsiy ma'lumotlar</h5>
-                    {% for field in form %}
-                        <div class="mb-3">
-                            <label class="form-label fw-bold" style="color: var(--text-color);">{{ field.label }}</label>
-                            <div class="form-control-wrapper">
+            <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
+                <div class="card-body p-4">
+                    <div class="mb-4">
+                        <h2 class="mb-1 fw-bold">Profilni tahrirlash</h2>
+                        <p class="text-muted mb-0">Shaxsiy ma'lumotlarni to'ldiring va profil qismlarini yangilang.</p>
+                    </div>
+
+                    <form method="post" enctype="multipart/form-data" class="account-edit-form">
+                        {% csrf_token %}
+
+                        <h5 class="text-primary mt-4 mb-3">Shaxsiy ma'lumotlar</h5>
+                        {% for field in form %}
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold">{{ field.label }}</label>
                                 {{ field }}
+                                {% if field.errors %}
+                                    <div class="text-danger small mt-1">{{ field.errors }}</div>
+                                {% endif %}
                             </div>
-                            {% if field.errors %}<div class="text-danger small">{{ field.errors }}</div>{% endif %}
+                        {% endfor %}
+
+                        <hr class="my-4">
+
+                        <h5 class="text-primary mt-4 mb-3">Profil qismlari</h5>
+                        <div class="d-flex flex-wrap gap-2 mb-4">
+                            <a href="{% url 'add_skill' user.pk %}" class="btn btn-outline-primary btn-sm"><i class="fas fa-plus me-1"></i> Ko'nikma qo'shish</a>
+                            <a href="{% url 'add_portfolio' user.pk %}" class="btn btn-outline-primary btn-sm"><i class="fas fa-plus me-1"></i> Portfolio qo'shish</a>
+                            <a href="{% url 'add_experience' user.pk %}" class="btn btn-outline-primary btn-sm"><i class="fas fa-plus me-1"></i> Ish tajribasi qo'shish</a>
+                            <a href="{% url 'add_education' user.pk %}" class="btn btn-outline-primary btn-sm"><i class="fas fa-plus me-1"></i> Ta'lim qo'shish</a>
+                            <a href="{% url 'add_language' user.pk %}" class="btn btn-outline-primary btn-sm"><i class="fas fa-plus me-1"></i> Til qo'shish</a>
                         </div>
-                    {% endfor %}
 
-                    <hr style="border-color: var(--border-color);">
-
-                    <h5 class="text-primary mt-4 mb-3">Profil qismlari</h5>
-                    <div class="d-flex flex-wrap gap-2 mb-4">
-                        <a href="{% url 'add_skill' user.pk %}" class="btn btn-outline-primary btn-sm"><i class="fas fa-plus me-1"></i> Ko'nikma qo'shish</a>
-                        <a href="{% url 'add_portfolio' user.pk %}" class="btn btn-outline-primary btn-sm"><i class="fas fa-plus me-1"></i> Portfolio qo'shish</a>
-                        <a href="{% url 'add_experience' user.pk %}" class="btn btn-outline-primary btn-sm"><i class="fas fa-plus me-1"></i> Ish tajribasi qo'shish</a>
-                        <a href="{% url 'add_education' user.pk %}" class="btn btn-outline-primary btn-sm"><i class="fas fa-plus me-1"></i> Ta'lim qo'shish</a>
-                        <a href="{% url 'add_language' user.pk %}" class="btn btn-outline-primary btn-sm"><i class="fas fa-plus me-1"></i> Til qo'shish</a>
-                    </div>
-
-                    <div class="d-flex justify-content-between mt-5">
-                        <a href="{% url 'profile' user.pk %}" class="btn btn-secondary">Bekor qilish</a>
-                        <button type="submit" class="btn btn-success px-4">Saqlash</button>
-                    </div>
-                </form>
+                        <div class="d-flex flex-column flex-sm-row justify-content-between gap-3 mt-4">
+                            <a href="{% url 'profile' user.pk %}" class="btn btn-outline-secondary w-100 w-sm-auto">Bekor qilish</a>
+                            <button type="submit" class="btn btn-success px-4 w-100 w-sm-auto">Saqlash</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
 <style>
-    /* Form input maydonlarini tungi rejimga moslash */
-    [data-theme='dark'] .form-control, 
-    [data-theme='dark'] .form-select {
-        background-color: #2d2d2d !important;
-        border-color: #444 !important;
-        color: #fff !important;
+    [data-theme='dark'] .account-edit-form .form-control,
+    [data-theme='dark'] .account-edit-form .form-select {
+        background-color: rgba(15, 23, 42, 0.88) !important;
+        border-color: rgba(148, 163, 184, 0.24) !important;
+        color: #f8fafc !important;
     }
-    [data-theme='dark'] .form-control:focus {
-        background-color: #333 !important;
-        border-color: var(--primary-color) !important;
+    [data-theme='dark'] .account-edit-form .form-control:focus,
+    [data-theme='dark'] .account-edit-form .form-select:focus {
+        background-color: rgba(15, 23, 42, 0.95) !important;
+        border-color: var(--primary) !important;
+        color: #f8fafc !important;
+        box-shadow: 0 0 0 0.15rem rgba(129, 140, 248, 0.2);
     }
 </style>
 {% endblock %}
