@@ -8,7 +8,7 @@ python manage.py migrate
 python manage.py shell << 'EOF'
 from django.contrib.auth import get_user_model
 User = get_user_model()
-username = 'admin'
+username = 'admin1'
 password = 'admin1234'
 if User.objects.filter(username=username).exists():
     u = User.objects.get(username=username)
@@ -18,6 +18,6 @@ if User.objects.filter(username=username).exists():
     u.save()
     print("Superuser yangilandi")
 else:
-    User.objects.create_superuser(username, 'admin@mail.com', password)
+    User.objects.create_superuser(username, 'admin1@mail.com', password)
     print("Superuser yaratildi")
 EOF
