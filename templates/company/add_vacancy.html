@@ -25,12 +25,6 @@
                             {{ form.description }}
                         </div>
 
-                        <style>
-                            #id_description {
-                                border-radius: 10% !important;
-                            }
-                        </style>
-
                         <div class="row gy-3">
                             <div class="col-md-6">
                                 <label class="form-label fw-semibold">{{ form.job_type.label }}</label>
@@ -40,7 +34,6 @@
                                 <label class="form-label fw-semibold">{{ form.salary_min.label }}</label>
                                 {{ form.salary_min }}
                             </div>
-                        </div>
                             <div class="col-md-6">
                                 <label class="form-label fw-semibold">{{ form.salary_max.label }}</label>
                                 {{ form.salary_max }}
@@ -62,7 +55,7 @@
 
                         <div class="d-grid gap-3 mt-4">
                             <button type="submit" class="btn btn-primary btn-lg fw-bold">E'lon qilish</button>
-                            <a href="{% url 'profile' request.user.pk %}" class="btn btn-outline-secondary btn-lg">Bekor qilish</a>
+                            <a href="{% url 'profile' user_pk=request.user.pk %}" class="btn btn-outline-secondary btn-lg">Bekor qilish</a>
                         </div>
                     </form>
                 </div>

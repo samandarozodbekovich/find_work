@@ -49,4 +49,48 @@
     #chat-body::-webkit-scrollbar { width: 6px; }
     #chat-body::-webkit-scrollbar-thumb { background-color: rgba(100, 116, 139, 0.55); border-radius: 10px; }
 </style>
+
+<script>
+const form = document.querySelector('.card-footer form');
+const chatBody = document.getElementById('chat-body');
+const currentUserId = {{ request.user.pk }};
+
+form.addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const input = form.querySelector('input[name="content"]');
+    const content = input.value.trim();
+    if (!content) return;
+
+    const formData = new FormData(form);
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+    const response = await fetch(window.location.pathname, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': csrfToken,
+        },
+        body: formData,
+    });
+
+    const data = await response.json();
+
+    if (data.status === 'success') {
+        const div = document.createElement('div');
+        div.className = 'd-flex justify-content-end mb-3';
+        div.innerHTML = `
+            <div class="p-3 rounded-4 shadow-sm bg-primary text-white" style="max-width: 72%;">
+                <p class="mb-1">${data.content}</p>
+                <small class="d-block text-end text-white-50">${data.created_at}</small>
+            </div>
+        `;
+        chatBody.appendChild(div);
+        chatBody.scrollTop = chatBody.scrollHeight;
+        input.value = '';
+    }
+});
+
+chatBody.scrollTop = chatBody.scrollHeight;
+</script>
+
 {% endblock %}

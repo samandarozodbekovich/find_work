@@ -340,9 +340,10 @@
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item"><a class="nav-link" href="/">Bosh sahifa</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'vacancy_list' %}">Vakansiyalar</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'post_list' %}">Postlar</a></li>
                 </ul>
 
-                <form action="{% url 'search_result' %}" method="get" class="navbar-search-form d-flex align-items-center gap-2">
+                <form action="{% url 'search_result' %}" method="get" class="navbar-search-form d-flex align-items-center gap-2" style="padding-top: 15px;">
                     <div class="input-group shadow-sm navbar-search-input-group">
                         <input type="text" name="q" class="form-control form-control-sm" placeholder="Ish qidirish..." value="{{ request.GET.q }}">
                         <button class="btn btn-primary btn-sm" type="submit"><i class="fas fa-search"></i></button>

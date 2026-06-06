@@ -11,4 +11,6 @@ class Message(BaseTimeModel):
     is_read = models.BooleanField(default=False)
     
     def __str__(self):
-        return f"Message from {self.sender.username} regarding {self.application.vacancy.title}"
+        sender = self.sender.username if self.sender else 'Deleted User'
+        vacancy = self.application.vacancy.title if self.application and self.application.vacancy else 'Deleted Vacancy'
+        return f"Message from {sender} regarding {vacancy}"

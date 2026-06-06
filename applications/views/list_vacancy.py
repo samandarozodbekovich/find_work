@@ -64,13 +64,11 @@ class VacancyDetailView(HitCountDetailView):
         context['comment_form'] = CommentForm
         
         if self.request.user.is_authenticated:
-            application = Application.objects.filter(
+            context['application'] = Application.objects.filter(
                 user=self.request.user, 
                 vacancy=self.object
             ).first()
             
-            context['has_applied'] = application is not None
-            context['application'] = application
         return context
 
 # Ariza topshirish funksiyasi

@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
 
-from ..models import User
+from ..models import User, Post
 
 
 @login_required
@@ -23,6 +23,7 @@ def profile_view(request, user_pk):
         context = {
             'user': user,
             'total_applications': total_apps,
+            'posts': user.post_set.all(),
         }
         return render(request, 'company/employer_profile.html', context)
     
@@ -35,5 +36,6 @@ def profile_view(request, user_pk):
         'experiences': user.experience_set.all(),
         'educations': user.education_set.all(),
         'certificates': user.certificate_set.all(),
+        'posts': user.post_set.all(),
     }
     return render(request, 'accounts/student_profile.html', context)

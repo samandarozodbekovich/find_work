@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container py-4">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card mb-3">
+                {% if post.image %}
+                    <img src="{{ post.image.url }}" class="card-img-top" alt="{{ post.title }}">
+                {% endif %}
+                <div class="card-body">
+                    <h3 class="mb-2">{{ post.title }}</h3>
+                    <p class="text-muted small">By <a href="{% url 'profile' post.user.pk %}">{{ post.user.username }}</a> — {{ post.created_at|date:'M d, Y' }}</p>
+                    <div class="mt-3">{{ post.description|linebreaks }}</div>
+                    {% if user.is_authenticated and user.pk == post.user.pk %}
+                        <div class="mt-3 d-flex gap-2">
+                            <a href="{% url 'edit_post' user.pk post.pk %}" class="btn btn-outline-primary">Tahrirlash</a>
+                            <a href="{% url 'delete_post' user.pk post.pk %}" class="btn btn-danger">O'chirish</a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            <a href="{% url 'post_list' %}" class="btn btn-outline-secondary">Ortga</a>
+        </div>
+        <div class="col-md-4">
+            <div class="card p-3">
+                <p class="mb-1"><strong>Kuzatuvlar:</strong> {{ post.views }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

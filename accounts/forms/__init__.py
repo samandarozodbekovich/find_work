@@ -9,3 +9,4 @@ from .password_set_confirm import CustomSetPasswordForm
 from .language import LanguageForm
 from .portfolio import PortfolioForm
 from .certificate import CertificateForm
+from .post import PostForm

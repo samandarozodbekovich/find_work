@@ -8,3 +8,4 @@ from .student_skill import StudentSkillAdmin
 from .user import UserAdmin
 from .education import EducationAdmin
 from .experience import ExperienceAdmin
+from .post import PostAdmin

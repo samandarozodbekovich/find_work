@@ -15,7 +15,7 @@ def add_certificate_view(request, user_pk):
             cert.save()
             if 'add_another' in request.POST:
                 return redirect('add_certificate', user_pk=user_pk)
-            return redirect('profile', pk=user_pk)
+            return redirect('profile', user_pk=user_pk)
     else:
         form = CertificateForm()
     return render(request, 'accounts/add_form.html', {'form': form, 'title': "Sertifikat qo'shish"})
@@ -29,7 +29,7 @@ def edit_certificate_view(request, user_pk, pk):
         form = CertificateForm(request.POST, request.FILES, instance=cer)
         if form.is_valid():
             form.save()
-            return redirect('profile', pk=user_pk)
+            return redirect('profile', user_pk=user_pk)
     else:
         form = CertificateForm(instance=cer)
     return render(request, 'accounts/add_form.html', {'form': form, 'title': "Sertifikatni tahrirlash"})
@@ -41,5 +41,5 @@ def delete_certificate_view(request, user_pk, pk):
     
     if request.method == 'POST':
         cer.delete()
-        return redirect('profile', pk=user_pk)
+        return redirect('profile', user_pk=user_pk)
     return render(request, 'accounts/confirm_delete.html', {'obj': cer})

@@ -11,6 +11,13 @@ from .views import register_view, profile_view,\
     add_education_view, edit_education_view, delete_education_view, \
     add_experience_view, edit_experience_view, delete_experience_view,\
     add_language_view, edit_language_view, delete_language_view
+from .views.posts import (
+    PostListView,
+    PostDetailView,
+    PostCreateView,
+    PostUpdateView,
+    PostDeleteView,
+)
             
 from .forms import CustomPasswordChangeForm, CustomSetPasswordForm
     
@@ -57,11 +64,28 @@ urlpatterns = [
     ), name='password_change_done'),
     
     path('password-reset/', auth_views.PasswordResetView.as_view(
+        template_name='registration/password_reset.html',
     ), name='password_reset'),
+
     path('password-reset/done/', auth_views.PasswordResetDoneView.as_view(
+        template_name='registration/password_reset_done.html',
     ), name='password_reset_done'),
+
     path('password-reset-confirm/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(
-    form_class=CustomSetPasswordForm), name='password_reset_confirm'),
+        template_name='registration/password_reset_confirm.html',
+        form_class=CustomSetPasswordForm
+    ), name='password_reset_confirm'),
+
     path('password-reset/complete/', auth_views.PasswordResetCompleteView.as_view(
+        template_name='registration/password_reset_complete.html',
     ), name='password_reset_complete'),
+]
+
+# posts
+urlpatterns += [
+    path('posts/', PostListView.as_view(), name='post_list'),
+    path('post/<int:pk>/', PostDetailView.as_view(), name='post_detail'),
+    path('profile/<int:user_pk>/add/post/', PostCreateView.as_view(), name='add_post'),
+    path('profile/<int:user_pk>/edit/post/<int:pk>/', PostUpdateView.as_view(), name='edit_post'),
+    path('profile/<int:user_pk>/delete/post/<int:pk>/', PostDeleteView.as_view(), name='delete_post'),
 ]

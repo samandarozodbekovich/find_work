@@ -9,3 +9,10 @@ from .experience import add_experience_view, edit_experience_view, delete_experi
 from .language import add_language_view, edit_language_view, delete_language_view
 from .login import CustomLoginView
 from .logout import CustomLogoutView
+from .posts import (
+	PostListView,
+	PostDetailView,
+	PostCreateView,
+	PostUpdateView,
+	PostDeleteView,
+)

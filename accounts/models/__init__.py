@@ -8,6 +8,7 @@ from .student_skill import StudentSkill
 from .user import User
 from .education import Education
 from .experience import Experience
+from .post import Post
 
 __all__ = [
     "Certificate",
@@ -21,4 +22,5 @@ __all__ = [
     "User",
     "Education",
     "Experience",
+    "Post",
 ]

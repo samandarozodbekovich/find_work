@@ -112,8 +112,15 @@
 
                 {% if user.is_authenticated %}
                     {% if user.role == 'student' %}
-                        {% if has_applied %}
-                            <div class="alert alert-info">Siz allaqachon ariza yubordingiz.</div>
+                        {% if application %}
+                            {% if application.status == 'pending' %}
+                                <div class="alert alert-info">Siz ariza yubordingiz. Ko'rib chiqilmoqda...</div>
+                            {% elif application.status == 'rejected' %}
+                                <div class="alert alert-danger">❌ Arizangiz rad etildi.</div>
+                            {% elif application.status == 'accepted' %}
+                                <div class="alert alert-success">✅ Arizangiz qabul qilindi!</div>
+                                <a href="{% url 'chat_view' application.pk %}" class="btn btn-success w-100 rounded-pill py-3 mt-2">💬 Chatga o'tish</a>
+                            {% endif %}
                         {% else %}
                             <form method="post" action="{% url 'apply_to_vacancy' vacancy.pk %}">
                                 {% csrf_token %}

@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container py-4">
+    <div class="row">
+        <div class="col-md-8">
+            <h3 class="mb-3">So'nggi postlar</h3>
+            <div class="row row-cols-1 gy-3">
+            {% for post in posts %}
+                <div class="col">
+                    <div class="card shadow-sm border-0">
+                        <div class="row g-0 align-items-center">
+                            <div class="col-auto p-3">
+                                {% if post.image %}
+                                    <img src="{{ post.image.url }}" alt="{{ post.title }}" style="width:140px;height:100px;object-fit:cover;border-radius:8px;"/>
+                                {% else %}
+                                    <div style="width:140px;height:100px;border-radius:8px;background:linear-gradient(135deg,#eef2ff,#f8fafc);display:flex;align-items:center;justify-content:center;color:#4338ca;font-weight:700">{{ post.title|slice:":1" }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col">
+                                <div class="card-body py-3">
+                                    <h5 class="card-title mb-1"><a href="{% url 'post_detail' post.pk %}" class="text-decoration-none text-dark">{{ post.title }}</a></h5>
+                                    <p class="text-muted small mb-2">By <a href="{% url 'profile' post.user.pk %}">{{ post.user.username }}</a> — {{ post.created_at|date:'M d, Y' }}</p>
+                                    <p class="mb-2 text-muted">{{ post.description|truncatechars:160 }}</p>
+                                    <div class="d-flex gap-2">
+                                        <a href="{% url 'post_detail' post.pk %}" class="btn btn-sm btn-outline-primary">Batafsil</a>
+                                        {% if user.is_authenticated and user.pk == post.user.pk %}
+                                            <a class="btn btn-sm btn-outline-secondary" href="{% url 'edit_post' user.pk post.pk %}">Tahrirlash</a>
+                                            <a class="btn btn-sm btn-danger" href="{% url 'delete_post' user.pk post.pk %}">O'chirish</a>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <p class="text-muted">Hozircha postlar mavjud emas.</p>
+            {% endfor %}
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card p-3">
+                <a class="btn btn-primary w-100" href="{% url 'add_post' user.pk %}">Yangi post</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
